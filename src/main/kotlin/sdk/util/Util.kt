@@ -28,6 +28,7 @@ class Util(private var serverConnector: TFWServerConnector) {
                 triggerMessage.put(it.key, it.value)
             }
         }
+        println("Sending message: $triggerMessage")
         serverConnector.send(triggerMessage)
     }
 

@@ -5,14 +5,15 @@
 package sdk.util
 
 import com.fasterxml.jackson.databind.node.ObjectNode
+import org.zeromq.SocketType
 import org.zeromq.ZMQ
 import java.nio.charset.StandardCharsets
 import java.util.ArrayList
 
 class TFWServerConnector {
     val context: ZMQ.Context = ZMQ.context(1)
-    private val pushSocket: ZMQ.Socket = context.socket(ZMQ.PUSH)
-    private val pushSocketConnectionString: String = "tcp://localhost:8765"// + System.getenv("TFW_PULL_PORT") // 8765
+    private val pushSocket = context.socket(SocketType.PUSH)
+    private val pushSocketConnectionString = "tcp://localhost:8765"// + System.getenv("TFW_PULL_PORT") // 8765
 
     init {
         connect()

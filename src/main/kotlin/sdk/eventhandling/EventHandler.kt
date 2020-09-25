@@ -4,6 +4,7 @@
  */
 package sdk.eventhandling
 
+import org.zeromq.SocketType
 import org.zeromq.ZMQ
 import sdk.API
 
@@ -13,15 +14,15 @@ abstract class EventHandler(
         private val handleEvent: (String) -> Unit
 ){
     private val context = api.getConnector().context
-    private val pullSocket = context.socket(ZMQ.SUB)
+    private val pullSocket = context.socket(SocketType.SUB)
     private val pullSocketUrl = "tcp://localhost:7654"// + System.getenv("TFW_PUB_PORT") // 7654
-    private val poller = ZMQ.Poller(1)
+    private val poller = context.poller(1)
 
     init {
         println("Event handler started with key \"$key\"")
         connect()
         subscribe()
-        register()
+        registerPoller()
         start()
     }
 
@@ -36,26 +37,22 @@ abstract class EventHandler(
     }
 
     /** Register to a given key */
-    private fun register() {
+    private fun registerPoller() {
         poller.register(pullSocket, ZMQ.Poller.POLLIN)
-    }
-
-    /** Unregister with the given key */
-    private fun unregister() {
-        poller.unregister(pullSocket)
     }
 
     /** Close connection with TFWServer. */
     fun destroy() {
-        unregister()
+        poller.close()
+        poller.unregister(pullSocket)
         pullSocket.close()
     }
 
     private fun start(){
         val thread = Thread {
-            while(true) {
+            while (true) {
                 poller.poll()
-                val message = pullSocket.recvStr(0, Charsets.UTF_8)
+                val message = pullSocket.recvStr(0)
                 if (message.contains("key"))
                     handleEvent.invoke(message)
             }
