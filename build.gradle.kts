@@ -2,8 +2,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    `kotlin-dsl`
-    `java-library`
+    kotlin("jvm") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 repositories {
@@ -16,12 +16,13 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation("com.fasterxml.jackson.core:jackson-databind:2.0.1")
     implementation("org.zeromq:jeromq:0.5.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.9")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.0.0-RC2")
+
+
     testImplementation(platform("org.junit:junit-bom:5.7.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-//    testImplementation(kotlin ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0"))
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0")
-
-
 }
 
 tasks.test {
@@ -38,5 +39,5 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 application {
-    mainClassName = "MainKt"
+    mainClassName = "com.avatao.tfw.sdk.MainKt"
 }
