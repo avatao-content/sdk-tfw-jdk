@@ -10,10 +10,6 @@ class DefaultConsoleAPI(
 ) : ConsoleAPI {
 
 
-    override fun readConsole(): String {
-        TODO("Not clear how this works yet")
-    }
-
     override fun writeToConsole(content: String) {
         connector.send(
             TFWMessage.builder()

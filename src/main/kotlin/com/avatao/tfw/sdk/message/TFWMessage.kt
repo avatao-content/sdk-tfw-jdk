@@ -59,9 +59,9 @@ interface TFWMessage {
         fun fromMap(map: Map<String, Any>): TFWMessage {
             val key = map["key"]?.toString() ?: error("key is missing from map")
             val scope = map["scope"]
-                ?.toString()?.let { TFWMessageScope.valueOf(it) } ?: TFWMessageScope.ZMQ
+                ?.toString()?.let { TFWMessageScope.valueOf(it.toUpperCase()) } ?: TFWMessageScope.ZMQ
             val intent = map["intent"]
-                ?.toString()?.let { TFWMessageIntent.valueOf(it) } ?: TFWMessageIntent.CONTROL
+                ?.toString()?.let { TFWMessageIntent.valueOf(it.toUpperCase()) } ?: TFWMessageIntent.CONTROL
             return builder()
                 .withKey(key)
                 .withScope(scope)

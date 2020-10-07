@@ -1,6 +1,6 @@
 package com.avatao.tfw.sdk.api.builder
 
-import com.avatao.tfw.sdk.api.ChatBotAPI
+import com.avatao.tfw.sdk.api.MessageAPI
 import com.avatao.tfw.sdk.api.data.EventKey
 import com.avatao.tfw.sdk.api.impl.tryWithValue
 import com.avatao.tfw.sdk.connector.TFWServerConnector
@@ -11,7 +11,7 @@ import com.avatao.tfw.sdk.message.TFWMessage
  */
 class SendMessageBuilder(
     private val connector: TFWServerConnector,
-    private val chatBotAPI: ChatBotAPI,
+    private val messageAPI: MessageAPI,
     private var message: String? = null,
     private var originator: String? = null,
     private var wpm: Int? = null,
@@ -51,27 +51,29 @@ class SendMessageBuilder(
      * Send this message to the TFW server when the message is clicked.
      */
     fun command(command: String) = also {
+        this.command = command
+    }
 
+    fun build(): TFWMessage {
+        require(message != null) {
+            "Message is mandatory when sending a message."
+        }
+        return TFWMessage.builder()
+            .withKey(EventKey.MESSAGE_SEND.value)
+            .tryWithValue(messageKey, message)
+            .tryWithValue(originatorKey, originator)
+            .tryWithValue(wpmKey, wpm)
+            .tryWithValue(typingKey, typing)
+            .tryWithValue(commandKey, command)
+            .build()
     }
 
     /**
      * Builds and sends the message to TFW.
      */
-    fun commit(): ChatBotAPI {
-        require(message != null) {
-            "Message is mandatory when sending a message."
-        }
-        connector.send(
-            TFWMessage.builder()
-                .withKey(EventKey.MESSAGE_SEND.value)
-                .tryWithValue(messageKey, message)
-                .tryWithValue(originatorKey, originator)
-                .tryWithValue(wpmKey, wpm)
-                .tryWithValue(typingKey, typing)
-                .tryWithValue(commandKey, command)
-                .build()
-        )
-        return chatBotAPI
+    fun commit(): MessageAPI {
+        connector.send(build())
+        return messageAPI
     }
 
     companion object {

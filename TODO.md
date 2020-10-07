@@ -19,3 +19,6 @@
 - [ ] How does `fsm.update` work? Is this something content creators can use to query the state of
       the fsm or does the framework query us? Also the keys are snake_case instead of camelCase
 - [ ] `dashboard.reloadIframe` is not documented
+
+
+- copy files from `TFW_IDE_WD` to test folder

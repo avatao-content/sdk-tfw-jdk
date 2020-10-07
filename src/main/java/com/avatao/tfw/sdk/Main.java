@@ -103,6 +103,10 @@ public class Main {
                 });
 
         api.sendMessage().message("hey.").commit();
+        api.queueMessages()
+                .message(api.sendMessage().message("hey"))
+                .message(api.sendMessage().message("other hey"))
+                .commit();
         api.writeToConsole("Hello, Console!");
 
         api.close();
