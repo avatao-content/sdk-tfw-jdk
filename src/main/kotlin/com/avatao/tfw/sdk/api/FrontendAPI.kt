@@ -17,13 +17,6 @@ interface FrontendAPI {
     fun configureIDE(): IDEConfigurationBuilder
 
     /**
-     * Callback that is called when the frontend signals that it is ready.
-     * **Note that** the [Subscription] will automatically be cancelled
-     * whenever the event is fired.
-     */
-    fun onFrontendReady(fn: (FrontendAPI) -> Unit): Subscription
-
-    /**
      * When the user tries to reload the page, this will prompt a
      * confirmation dialog. It can be really useful, since the
      * frontend serves as a single-page application.
@@ -33,24 +26,10 @@ interface FrontendAPI {
         .commit()
 
     /**
-     * Provides title for the browser tab.
-     */
-    fun setDocumentTitle(documentTitle: String) = configureSite()
-        .documentTitle(documentTitle)
-        .commit()
-
-    /**
      * Switches the layout.
      */
     fun switchLayout(layout: FrontendLayout) = configureDashboard()
         .layout(layout)
-        .commit()
-
-    /**
-     * Hides bot messages when true.
-     */
-    fun setHideMessages(hideMessages: Boolean) = configureDashboard()
-        .hideMessages(hideMessages)
         .commit()
 
     /**

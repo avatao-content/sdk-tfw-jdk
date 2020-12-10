@@ -43,12 +43,6 @@ interface WebIDEAPI {
     ): Subscription
 
     /**
-     * Notifies the frontend that a watched file is being modified on the file system,
-     * so it should update its state.
-     */
-    fun reloadIde()
-
-    /**
      * Informs the backend that the Deploy button was pressed in the IDE.
      */
     fun onDeployStart(fn: () -> SubscriptionCommand): Subscription

@@ -19,11 +19,4 @@ class DefaultFrontendAPI(
 
     override fun configureIDE() = IDEConfigurationBuilder(connector, this)
 
-    override fun onFrontendReady(fn: (FrontendAPI) -> Unit): Subscription {
-        return connector.subscribe(EventKey.FRONTEND_READY.value) {
-            fn(this)
-            CancelSubscription
-        }
-    }
-
 }

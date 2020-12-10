@@ -68,15 +68,6 @@ class DefaultWebIDEAPI(
         }
     }
 
-    override fun reloadIde() {
-        connector.send(
-            TFWMessage.builder()
-                .withKey(EventKey.IDE_RELOAD.value)
-                .withScope(TFWMessageScope.WEBSOCKET)
-                .build()
-        )
-    }
-
     override fun onDeployStart(fn: () -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.DEPLOY_START.value) {
             fn()

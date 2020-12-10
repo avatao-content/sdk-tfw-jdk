@@ -1,8 +1,11 @@
 package com.avatao.tfw.sdk.api
 
+import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.api.data.TFWConfig
-import com.avatao.tfw.sdk.strategy.DeployStrategy
+import com.avatao.tfw.sdk.connector.Subscription
 import com.avatao.tfw.sdk.connector.TFWServerConnector
+import com.avatao.tfw.sdk.message.TFWMessage
+import com.avatao.tfw.sdk.strategy.DeployStrategy
 import java.io.Closeable
 
 interface TFWFacade
@@ -10,6 +13,12 @@ interface TFWFacade
 
     val connector: TFWServerConnector
     val tfwConfig: TFWConfig
+
+    fun send(message: TFWMessage) = connector.send(message)
+
+    fun subscribe(key: String, fn: (TFWMessage) -> SubscriptionCommand): Subscription {
+        return connector.subscribe(key, fn)
+    }
 
     fun connector(fn: TFWServerConnector.() -> Unit): TFWFacade
 

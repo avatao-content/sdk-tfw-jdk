@@ -21,14 +21,6 @@ public class Main {
         TFWServerMock mock = TFWServerMock.create();
         TFWFacade api = TFW.create();
 
-        api.onFrontendReady(frontend -> {
-            frontend
-                    .configureDashboard().commit()
-                    .configureIDE().commit()
-                    .configureSite().commit();
-            return Unit.INSTANCE;
-        });
-
         api.onReadFile(cmd -> {
             cmd.respondWith(new FileContents(
                     cmd.getFilename(),

@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
  * Contains the source, destination, trigger keyword and timestamp of the latest transition.
  */
 @Serializable
-class LastEvent(
+data class LastEvent(
     val fromState: String,
     val toState: String,
     val trigger: String,

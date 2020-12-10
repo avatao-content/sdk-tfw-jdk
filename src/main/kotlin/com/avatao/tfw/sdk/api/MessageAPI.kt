@@ -7,6 +7,10 @@ interface MessageAPI {
 
     fun sendMessage(): SendMessageBuilder
 
+    fun sendMessage(message: String) = sendMessage()
+        .message(message)
+        .commit()
+
     fun queueMessages(): QueueMessageBuilder
 
 }

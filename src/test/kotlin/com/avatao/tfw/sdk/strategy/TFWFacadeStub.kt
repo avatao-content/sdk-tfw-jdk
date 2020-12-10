@@ -74,10 +74,6 @@ class TFWFacadeStub : TFWFacade {
         TODO("not implemented")
     }
 
-    override fun onFrontendReady(fn: (FrontendAPI) -> Unit): Subscription {
-        TODO("not implemented")
-    }
-
     override fun sendMessage(): SendMessageBuilder {
         TODO("not implemented")
     }
@@ -99,10 +95,6 @@ class TFWFacadeStub : TFWFacade {
     }
 
     override fun onWriteFile(fn: (WriteFile) -> SubscriptionCommand): Subscription {
-        TODO("not implemented")
-    }
-
-    override fun reloadIde() {
         TODO("not implemented")
     }
 

@@ -3,7 +3,7 @@ package com.avatao.tfw.sdk.api.data
 import kotlinx.serialization.Serializable
 
 @Serializable
-class FSMState(
+data class FSMState(
     /**
      * Name of the current FSM state.
      */
