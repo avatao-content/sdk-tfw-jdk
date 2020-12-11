@@ -21,20 +21,29 @@ class DefaultWebIDEAPI(
     private val connector: TFWServerConnector
 ) : WebIDEAPI {
 
-    override fun readFile(filename: String, patterns: List<String>): Future<FileContents> {
+    override fun selectFile(filename: String, patterns: List<String>?): Future<FileContents> {
         val result = CompletableFuture<FileContents>()
         connector.subscribe(EventKey.IDE_READ.value) {
             val prr = Json.decodeFromString<FileContents>(it.rawJson)
             result.complete(prr)
             CancelSubscription
         }
-        connector.send(
-            TFWMessage.builder()
-                .withKey(EventKey.IDE_READ.value)
-                .withValue(ReadFile::filename.name, filename)
-                .withValue(ReadFile::patterns.name, filename)
-                .build()
-        )
+
+        if (!patterns.isNullOrEmpty())
+            connector.send(
+                TFWMessage.builder()
+                    .withKey(EventKey.IDE_READ.value)
+                    .withValue(ReadFile::filename.name, filename)
+                    .withValue(ReadFile::patterns.name, filename)
+                    .build()
+            )
+        else
+            connector.send(
+                TFWMessage.builder()
+                    .withKey(EventKey.IDE_READ.value)
+                    .withValue(ReadFile::filename.name, filename)
+                    .build()
+            )
         return result
     }
 

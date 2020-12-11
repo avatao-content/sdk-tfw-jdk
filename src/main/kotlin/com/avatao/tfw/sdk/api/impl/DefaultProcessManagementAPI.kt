@@ -15,7 +15,9 @@ class DefaultProcessManagementAPI(
     private val connector: TFWServerConnector
 ) : ProcessManagementAPI {
 
-    override fun startProcess(name: String): Future<ProcessStartResult> {
+    override fun startProcess(name: String) {
+        Runtime.getRuntime().exec("supervisorctl start $name")
+        /*
         val result = CompletableFuture<ProcessStartResult>()
         connector.subscribe(EventKey.PROCESS_START.value) {
             val psr = Json.decodeFromString<ProcessStartResult>(it.rawJson)
@@ -33,9 +35,13 @@ class DefaultProcessManagementAPI(
                 .build()
         )
         return result
+        */
     }
 
-    override fun stopProcess(name: String): Future<ProcessStopResult> {
+    override fun stopProcess(name: String) {
+        Runtime.getRuntime().exec("supervisorctl stop $name")
+
+        /*
         val result = CompletableFuture<ProcessStopResult>()
         connector.subscribe(EventKey.PROCESS_STOP.value) {
             val psr = Json.decodeFromString<ProcessStopResult>(it.rawJson)
@@ -52,11 +58,12 @@ class DefaultProcessManagementAPI(
                 .withValue("name", name)
                 .build()
         )
-        return result
+        return result*/
     }
 
-    override fun restartProcess(name: String): Future<ProcessRestartResult> {
-        val result = CompletableFuture<ProcessRestartResult>()
+    override fun restartProcess(name: String){
+        Runtime.getRuntime().exec("supervisorctl restart $name")
+        /*val result = CompletableFuture<ProcessRestartResult>()
         connector.subscribe(EventKey.PROCESS_RESTART.value) {
             val prr = Json.decodeFromString<ProcessRestartResult>(it.rawJson)
             if (prr.name == name) {
@@ -72,7 +79,7 @@ class DefaultProcessManagementAPI(
                 .withValue("name", name)
                 .build()
         )
-        return result
+        return result*/
     }
 
     override fun readLog(): Flux<ProcessLogEntry> = Flux.create { sink ->

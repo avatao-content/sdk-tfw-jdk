@@ -15,7 +15,7 @@ interface FSMAPI {
     /**
      * Attempts to trigger an FSM step.
      */
-    fun trigger(state: String)
+    fun step(state: Int = -1, force: Boolean = false)
 
     /**
      * Inquires about the current state of the FSM.
@@ -25,5 +25,5 @@ interface FSMAPI {
     /**
      * Adds a callback, that will be called whenever the state of the FSM changes.
      */
-    fun onUpdate(fn: (CurrentFSMState) -> SubscriptionCommand): Subscription
+    fun onStateChange(fn: (CurrentFSMState) -> SubscriptionCommand): Subscription
 }

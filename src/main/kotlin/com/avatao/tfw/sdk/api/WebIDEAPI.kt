@@ -13,9 +13,9 @@ interface WebIDEAPI {
     /**
      * Tries to read the contents of the given [filename] using the given [patterns].
      */
-    fun readFile(
+    fun selectFile(
         filename: String,
-        patterns: List<String>
+        patterns: List<String>? = null
     ): Future<FileContents>
 
     /**

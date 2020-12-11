@@ -26,11 +26,17 @@ class DefaultFSMAPI(
         )
     }
 
-    override fun trigger(state: String) {
+    override fun step(state: Int, force: Boolean) {
+        val stateToSend : String = if (state == -1)
+            "step_next"
+        else if (force)
+            "to_$state"
+        else
+            "step_$state"
         connector.send(
             TFWMessage.builder()
                 .withKey(EventKey.FSM_TRIGGER.value)
-                .withValue("transition", state)
+                .withValue("transition", stateToSend)
                 .build()
         )
     }
@@ -49,7 +55,7 @@ class DefaultFSMAPI(
         return result
     }
 
-    override fun onUpdate(fn: (CurrentFSMState) -> SubscriptionCommand): Subscription {
+    override fun onStateChange(fn: (CurrentFSMState) -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.FSM_UPDATE.value) {
             fn(Json.decodeFromString(it.rawJson))
         }

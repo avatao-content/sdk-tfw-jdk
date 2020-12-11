@@ -13,17 +13,17 @@ interface ProcessManagementAPI {
     /**
      *  Instructs the supervisor daemon to start a registered process.
      */
-    fun startProcess(name: String): Future<ProcessStartResult>
+    fun startProcess(name: String)
 
     /**
      *  Instructs the supervisor daemon to stop a registered process.
      */
-    fun stopProcess(name: String): Future<ProcessStopResult>
+    fun stopProcess(name: String)
 
     /**
      *  Instructs the supervisor daemon to restart a registered process.
      */
-    fun restartProcess(name: String): Future<ProcessRestartResult>
+    fun restartProcess(name: String)
 
     /**
      * Returns a [Flux] of log events.

@@ -25,5 +25,6 @@ enum class EventKey(
     PROCESS_LOG_SET("process.log.set"),
     FSM_TRIGGER("fsm.trigger"),
     FSM_UPDATE("fsm.update"),
-    FSM_CREATE("fsm.create")
+    FSM_CREATE("fsm.create"),
+    BUTTON_CLICK("message.button.click")
 }

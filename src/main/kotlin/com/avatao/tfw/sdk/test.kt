@@ -1,7 +1,6 @@
 package com.avatao.tfw.sdk
 
 import com.avatao.tfw.sdk.api.data.DeployStatus
-import com.avatao.tfw.sdk.api.data.EventKey
 import com.avatao.tfw.sdk.api.data.FrontendLayout
 import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.message.TFWMessage
@@ -40,11 +39,8 @@ fun main() {
     sdk.writeToConsole("no problemo")
 
     /* IDE */
-    // select file?
-    sdk.readFile("x.java", listOf())
-
-    val patterns = listOf("/home/user/workdir/*")
-    sdk.readFile("/home/user/workdir/cat2.txt", patterns)
+    sdk.selectFile("Program.java")
+    sdk.selectFile("/home/user/workdir/Program.java", listOf("/home/user/workdir/*.java"))
 
     val labels = mapOf(
         DeployStatus.DEPLOYING to "Deploy",
@@ -63,51 +59,67 @@ fun main() {
     sdk.restartProcess("webservice")
 
     /* FSM */
-    sdk.trigger("2") // steps to the given state
+    sdk.step() // steps to the next state
+    sdk.step(2) // steps to the given state if the current state is the previous than given
+    sdk.step(3, force = true) // steps to the given state no matter what is the current
 
-    sdk.onDeployStart {
-        // CUSTOM DEPLOY LOGIC
-        sdk.sendMessage().message("DEPLOY BUTTON CLICKED").commit()
-        // You can pass an error message if needed.
-        // Use no parameter if the deploy is successful.
-        val errorMessage = "Error happened."
-        sdk.signalDeployFailure(errorMessage)
-
-        SubscriptionCommand.cancelSubscription() // ha nem akarjuk megtartani a felirakozast
-        SubscriptionCommand.keepSubscription() // ha kell tovabbra is a feliratkozas
-    }
-
-    // deploy handler
-    sdk.subscribe(EventKey.DEPLOY_START.value) { message ->
-
-        // CUSTOM DEPLOY LOGIC
-        sdk.sendMessage().message("DEPLOY BUTTON CLICKED").commit()
-        // You can pass an error message if needed.
-        // Use no parameter if the deploy is successful.
-        val errorMessage = "Error happened."
-        sdk.signalDeployFailure(errorMessage)
-
-        SubscriptionCommand.cancelSubscription() // ha nem akarjuk megtartani a felirakozast
-        SubscriptionCommand.keepSubscription() // ha kell tovabbra is a feliratkozas
-    }
-
-    sdk.subscribe("custom.valami") { message: TFWMessage ->
-
-        // CUSTOM HANDLING LOGIC
-        val buttonValue = message.data["value"]
-        sdk.sendMessage("MESSAGE BUTTON CLICKED: " + buttonValue)
-
-        SubscriptionCommand.keepSubscription()
-    }
-
+    /* SENDING CUSTOM TFW MESSAGE */
     sdk.send(
         TFWMessage.builder()
             .withIntent(TFWMessageIntent.CONTROL)
-            .withKey("kulcs")
+            .withKey("key")
             .withScope(TFWMessageScope.BROADCAST)
-            .withValue("kulcs", "ertek")
+            .withValue("key", "value")
             .build()
     )
 
+    /* -----------------------------*/
+    /*        EVENT HANDLING        */
+    /* -----------------------------*/
 
+    /* DEFINING CUSTOM DEPLOY HANDLER */
+    sdk.onDeployStart {
+        sdk.sendMessage("DEPLOY BUTTON CLICKED")
+        sdk.signalDeploySuccess()
+
+        // Alternatively you can send the error message when something is wrong and
+        // the deploy was unsuccessful
+        // val errorMessage = "Error happened."
+        // sdk.signalDeployFailure(errorMessage)
+
+        // if you want to keep the subscription
+        SubscriptionCommand.keepSubscription()
+        // if you don't want to keep the subscription
+        // SubscriptionCommand.cancelSubscription()
+    }
+
+    /* DEFINING TERMINAL COMMAND HANDLER */
+    sdk.onTerminalCommand { command ->
+        sdk.sendMessage("COMMAND EXECUTED: $command")
+        SubscriptionCommand.keepSubscription()
+    }
+
+    /* DEFINING IDE WRITE HANDLER */
+    sdk.onWriteFile {
+        sdk.sendMessage("THE CONTENT OF THE FILE IN THE IDE HAS CHANGED")
+        SubscriptionCommand.keepSubscription()
+    }
+
+    /* STATE CHANGE HANDLER */
+    sdk.onStateChange {
+        sdk.sendMessage("CURRENT STATE: " + sdk.getCurrentState())
+        SubscriptionCommand.keepSubscription()
+    }
+
+    /* DEFINE BUTTON CLICK HANDLER */
+    sdk.onButtonClickHandler { button ->
+        sdk.sendMessage("MESSAGE BUTTON CLICKED: $button")
+        SubscriptionCommand.keepSubscription()
+    }
+
+    /* DEFINING CUSTOM HANDLER WITH ARBITRARY KEY */
+    sdk.subscribe("custom.key") { message: TFWMessage ->
+        sdk.sendMessage("HANDLING EVENT WITH KEY 'custom.key'. MESSAGE: $message")
+        SubscriptionCommand.keepSubscription()
+    }
 }
