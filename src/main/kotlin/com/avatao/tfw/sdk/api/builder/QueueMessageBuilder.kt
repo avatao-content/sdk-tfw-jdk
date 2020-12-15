@@ -26,19 +26,19 @@ class QueueMessageBuilder(
         messages.add(smb)
     }
 
-     /**
+    fun build() = TFWMessage.builder()
+        .withKey(EventKey.MESSAGE_QUEUE.value)
+        .tryWithValue(messagesKey, messages.map { it.build().data.minus("key") })
+        .build()
+
+    /**
      * Builds and sends the messages to TFW.
      */
     fun commit(): MessageAPI {
         require(messages.isNotEmpty()) {
             "There must be at least one message."
         }
-        connector.send(
-            TFWMessage.builder()
-                .withKey(EventKey.MESSAGE_QUEUE.value)
-                .tryWithValue(messagesKey, messages.map { it.build() })
-                .build()
-        )
+        connector.send(build())
         return messageAPI
     }
 

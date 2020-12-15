@@ -46,11 +46,15 @@ interface TFWMessage {
      * Contains the raw json content of this [TFWMessage].
      */
     val rawJson: String
-        get() = objectMapper.writeValueAsString(data)
+        get() = OBJECT_MAPPER.writeValueAsString(data)
 
     companion object {
 
-        private val objectMapper = ObjectMapper()
+        val DEFAULT_INTENT = TFWMessageIntent.CONTROL
+        val DEFAULT_SCOPE = TFWMessageScope.ZMQ
+
+        private val OBJECT_MAPPER = ObjectMapper()
+
 
         @JvmStatic
         fun builder(): TFWMessageBuilder = TFWMessageBuilder()
@@ -62,12 +66,16 @@ interface TFWMessage {
                 ?.toString()?.let { TFWMessageScope.valueOf(it.toUpperCase()) } ?: TFWMessageScope.ZMQ
             val intent = map["intent"]
                 ?.toString()?.let { TFWMessageIntent.valueOf(it.toUpperCase()) } ?: TFWMessageIntent.CONTROL
-            return builder()
+            var builder = builder()
                 .withKey(key)
-                .withScope(scope)
-                .withIntent(intent)
                 .withValues(map)
-                .build()
+            if (scope != DEFAULT_SCOPE) {
+                builder = builder.withScope(scope)
+            }
+            if (intent != DEFAULT_INTENT) {
+                builder = builder.withIntent(intent)
+            }
+            return builder.build()
         }
     }
 }

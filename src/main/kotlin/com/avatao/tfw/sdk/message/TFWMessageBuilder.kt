@@ -31,15 +31,19 @@ class TFWMessageBuilder {
         require(key !== null) {
             "Can't build a TFWMessage without a key."
         }
+        val data = rest.toMutableMap()
+        data["key"] = key!!
+        if (intent != TFWMessage.DEFAULT_INTENT) {
+            data["intent"] = intent.value
+        }
+        if (scope != TFWMessage.DEFAULT_SCOPE) {
+            data["scope"] = scope.value
+        }
         return DefaultTFWMessage(
             key = key!!,
             intent = intent,
             scope = scope,
-            data = rest.toMap() + mapOf(
-                "key" to key!!,
-                "intent" to intent.value,
-                "scope" to scope.value
-            )
+            data = data
         )
     }
 
