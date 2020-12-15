@@ -8,8 +8,6 @@ import com.avatao.tfw.sdk.message.TFWMessage
 class DefaultConsoleAPI(
     private val connector: TFWServerConnector
 ) : ConsoleAPI {
-
-
     override fun writeToConsole(content: String) {
         connector.send(
             TFWMessage.builder()
@@ -18,6 +16,4 @@ class DefaultConsoleAPI(
                 .build()
         )
     }
-
-
 }

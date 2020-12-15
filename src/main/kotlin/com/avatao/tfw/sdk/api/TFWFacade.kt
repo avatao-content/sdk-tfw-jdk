@@ -5,7 +5,6 @@ import com.avatao.tfw.sdk.api.data.TFWConfig
 import com.avatao.tfw.sdk.connector.Subscription
 import com.avatao.tfw.sdk.connector.TFWServerConnector
 import com.avatao.tfw.sdk.message.TFWMessage
-import com.avatao.tfw.sdk.strategy.DeployStrategy
 import java.io.Closeable
 
 interface TFWFacade
@@ -35,10 +34,4 @@ interface TFWFacade
     fun process(fn: ProcessManagementAPI.() -> Unit): TFWFacade
 
     fun fsm(fn: FSMAPI.() -> Unit): TFWFacade
-
-    /**
-     * Configures the given [DeployStrategy] to be used with this [TFWFacade].
-     */
-    fun useDeployStrategy(deployStrategy: DeployStrategy)
-
 }

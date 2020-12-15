@@ -60,6 +60,4 @@ class DefaultFSMAPI(
             fn(Json.decodeFromString(it.rawJson))
         }
     }
-
-
 }

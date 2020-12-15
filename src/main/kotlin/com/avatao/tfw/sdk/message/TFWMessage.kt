@@ -70,5 +70,4 @@ interface TFWMessage {
                 .build()
         }
     }
-
 }

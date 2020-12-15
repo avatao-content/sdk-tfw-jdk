@@ -43,9 +43,10 @@ interface WebIDEAPI {
     ): Subscription
 
     /**
-     * Informs the backend that the Deploy button was pressed in the IDE.
+     * Adds an event handler that will be triggered whenever a user clicks to the
+     * Deploy button.
      */
-    fun onDeployStart(fn: () -> SubscriptionCommand): Subscription
+    fun onDeploy(fn: () -> SubscriptionCommand): Subscription
 
     /**
      * Signals that a deploy that was started after receiving an [EventKey.DEPLOY_START]

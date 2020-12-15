@@ -16,7 +16,8 @@ class SendMessageBuilder(
     private var originator: String? = null,
     private var wpm: Int? = null,
     private var typing: Boolean? = null,
-    private var command: String? = null
+    private var command: String? = null,
+    private var buttons: List<String>? = null
 ) {
 
     /**
@@ -54,6 +55,14 @@ class SendMessageBuilder(
         this.command = command
     }
 
+    /**
+     * Adding buttons to the message.
+     * Buttons can be: 'yes', 'no', 'solution', 'hint', 'fix'
+     */
+    fun buttons(buttons: List<String>) = also {
+        this.buttons = buttons
+    }
+
     fun build(): TFWMessage {
         require(message != null) {
             "Message is mandatory when sending a message."
@@ -65,6 +74,7 @@ class SendMessageBuilder(
             .tryWithValue(wpmKey, wpm)
             .tryWithValue(typingKey, typing)
             .tryWithValue(commandKey, command)
+            .tryWithValue(buttonsKey, buttons)
             .build()
     }
 
@@ -82,5 +92,6 @@ class SendMessageBuilder(
         private const val wpmKey = "wpm"
         private const val typingKey = "typing"
         private const val commandKey = "command"
+        private const val buttonsKey = "buttons"
     }
 }

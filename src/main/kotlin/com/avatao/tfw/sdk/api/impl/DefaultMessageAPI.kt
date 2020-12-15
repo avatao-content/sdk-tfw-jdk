@@ -3,7 +3,6 @@ package com.avatao.tfw.sdk.api.impl
 import com.avatao.tfw.sdk.api.MessageAPI
 import com.avatao.tfw.sdk.api.builder.QueueMessageBuilder
 import com.avatao.tfw.sdk.api.builder.SendMessageBuilder
-import com.avatao.tfw.sdk.api.data.CurrentFSMState
 import com.avatao.tfw.sdk.api.data.EventKey
 import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.connector.Subscription

@@ -3,7 +3,6 @@ package com.avatao.tfw.sdk.api
 import com.avatao.tfw.sdk.api.data.TFWConfig
 import com.avatao.tfw.sdk.api.impl.*
 import com.avatao.tfw.sdk.connector.TFWServerConnector
-import com.avatao.tfw.sdk.strategy.DeployStrategy
 
 class DefaultTFWFacade(
     override val connector: TFWServerConnector = TFWServerConnector.create(),
@@ -24,7 +23,6 @@ class DefaultTFWFacade(
     ProcessManagementAPI by processManagementAPI,
     FSMAPI by fsmApi {
 
-    private val strategies = mutableListOf<DeployStrategy>()
 
     override fun connector(fn: TFWServerConnector.() -> Unit) = also {
         fn(connector)
@@ -44,20 +42,7 @@ class DefaultTFWFacade(
 
     override fun fsm(fn: FSMAPI.() -> Unit) = also(fn)
 
-    override fun useDeployStrategy(deployStrategy: DeployStrategy) {
-        strategies.add(deployStrategy)
-        deployStrategy.configure(this)
-    }
-
     override fun close() {
-        strategies.forEach {
-            try {
-                it.close()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
         connector.close()
     }
-
 }

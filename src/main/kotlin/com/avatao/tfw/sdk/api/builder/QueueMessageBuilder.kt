@@ -12,7 +12,7 @@ import com.avatao.tfw.sdk.message.TFWMessage
 class QueueMessageBuilder(
     private val connector: TFWServerConnector,
     private val messageAPI: MessageAPI,
-    private val messages: MutableList<SendMessageBuilder> = mutableListOf()
+    private val messages: MutableList<SendMessageBuilder> = mutableListOf(),
 ) {
 
     fun message(message: SendMessageBuilder) = also {
@@ -26,8 +26,7 @@ class QueueMessageBuilder(
         messages.add(smb)
     }
 
-
-    /**
+     /**
      * Builds and sends the messages to TFW.
      */
     fun commit(): MessageAPI {

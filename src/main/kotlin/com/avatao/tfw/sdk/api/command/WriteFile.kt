@@ -9,10 +9,7 @@ class WriteFile(
     private val connector: TFWServerConnector,
     data: Map<String, Any>
 ) {
-
     val filename: String by data
-
-    // TODO: not mandatory in docs!
     val content: String by data
 
     fun respondWith(results: FileWriteResults) {
@@ -24,5 +21,4 @@ class WriteFile(
                 .build()
         )
     }
-
 }

@@ -6,7 +6,6 @@ import com.avatao.tfw.sdk.api.builder.SiteConfigurationBuilder
 import com.avatao.tfw.sdk.api.data.DeployStatus
 import com.avatao.tfw.sdk.api.data.FrontendLayout
 import com.avatao.tfw.sdk.api.data.TerminalMenuItem
-import com.avatao.tfw.sdk.connector.Subscription
 
 interface FrontendAPI {
 
@@ -80,11 +79,8 @@ interface FrontendAPI {
     }.commit()
 
     /**
-     * Reloads the iFrame of the frontend.
+     * Reloads the iFrame of the webservice's iframe.
      */
-    // TODO: this is not documented!
-    fun reloadIframe(){
-//        sendToTFW("dashboard.reloadIframe")
-    }
+    fun reloadIframe()
 
 }

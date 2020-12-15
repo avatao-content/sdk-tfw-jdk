@@ -77,7 +77,7 @@ class DefaultWebIDEAPI(
         }
     }
 
-    override fun onDeployStart(fn: () -> SubscriptionCommand): Subscription {
+    override fun onDeploy(fn: () -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.DEPLOY_START.value) {
             fn()
         }

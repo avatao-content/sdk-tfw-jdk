@@ -43,7 +43,6 @@ class TFWMessageBuilder {
         )
     }
 
-
     class DefaultTFWMessage(
         override val key: String,
         override val intent: TFWMessageIntent,

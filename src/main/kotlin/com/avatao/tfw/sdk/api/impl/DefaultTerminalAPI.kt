@@ -25,6 +25,4 @@ class DefaultTerminalAPI(
             fn(it.data["command"]?.toString() ?: error("Command is missing"))
         }
     }
-
-
 }

@@ -14,26 +14,24 @@ import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.concurrent.thread
 
-
 class ZMQServerConnector : TFWServerConnector {
 
     private val objectMapper: ObjectMapper = ObjectMapper()
     private val context: ZMQ.Context = ZMQ.context(1)
     private var running = AtomicBoolean(true)
 
-    // TODO: env var names good?
     private val pushHost = System.getenv("TFW_PULL_HOST") ?: "localhost"
     private val pushPort = System.getenv("TFW_PULL_PORT") ?: "8765"
     private val publisher = context.socket(SocketType.PUSH)
 
     private val subHost = System.getenv("TFW_PUB_HOST") ?: "localhost"
-    private val subPort = System.getenv("TFW_PUB_PORT") ?: "8766"
+    private val subPort = System.getenv("TFW_PUB_PORT") ?: "8766" //7654
     private val subscriber = context.socket(SocketType.SUB)
 
     private val subscriptions = ConcurrentHashMap<String, CopyOnWriteArrayList<CallbackSubscription>>()
 
     init {
-        publisher.bind("tcp://$pushHost:$pushPort")
+        publisher.connect("tcp://$pushHost:$pushPort")
         subscriber.connect("tcp://$subHost:$subPort")
         subscriber.subscribe(ZMQ.SUBSCRIPTION_ALL)
         thread {
@@ -85,7 +83,6 @@ class ZMQServerConnector : TFWServerConnector {
         override val key: String,
         val fn: (TFWMessage) -> SubscriptionCommand
     ) : Subscription {
-
         override fun close() {
             subscriptions[key]?.let {
                 it.remove(this)
@@ -94,6 +91,5 @@ class ZMQServerConnector : TFWServerConnector {
                 }
             }
         }
-
     }
 }

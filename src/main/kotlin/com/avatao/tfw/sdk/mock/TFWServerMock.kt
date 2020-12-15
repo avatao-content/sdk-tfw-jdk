@@ -1,7 +1,6 @@
 package com.avatao.tfw.sdk.mock
 
 import com.avatao.tfw.sdk.api.data.CurrentFSMState
-import com.avatao.tfw.sdk.api.data.EventKey
 import com.avatao.tfw.sdk.api.data.EventKey.*
 import com.avatao.tfw.sdk.api.data.StateTransition
 import com.avatao.tfw.sdk.api.data.ValidTransition
@@ -24,7 +23,6 @@ class TFWServerMock : Closeable {
     private val context: ZMQ.Context = ZMQ.context(1)
     private var running = AtomicBoolean(false)
 
-    // TODO: env var names good?
     private val pullHost = System.getenv("TFW_PULL_HOST") ?: "localhost"
     private val pullPort = System.getenv("TFW_PULL_PORT") ?: "8765"
     private val receiver = context.socket(SocketType.PULL)
@@ -69,7 +67,6 @@ class TFWServerMock : Closeable {
                             }
                         }
                     }
-
                 }
             }
         }
@@ -115,7 +112,6 @@ class TFWServerMock : Closeable {
     }
 
     companion object {
-
         @JvmStatic
         fun create() = TFWServerMock()
     }

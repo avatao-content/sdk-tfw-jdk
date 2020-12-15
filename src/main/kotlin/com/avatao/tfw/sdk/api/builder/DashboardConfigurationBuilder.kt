@@ -19,7 +19,7 @@ class DashboardConfigurationBuilder(
     private var iframeUrl: String? = null,
     private var showUrlBar: Boolean? = null,
     private var terminalMenuItem: TerminalMenuItem? = null,
-    private var enabledLayouts: List<FrontendLayout> = listOf()
+    private var enabledLayouts: List<FrontendLayout>? = null
 ) {
 
     /**
