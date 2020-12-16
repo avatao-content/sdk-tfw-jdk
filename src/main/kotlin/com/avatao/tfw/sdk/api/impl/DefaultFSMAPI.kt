@@ -44,7 +44,7 @@ class DefaultFSMAPI(
     override fun getCurrentState(): Future<CurrentFSMState> {
         val result = CompletableFuture<CurrentFSMState>()
         connector.subscribe(EventKey.FSM_UPDATE.value) {
-            result.complete(Json.decodeFromString<CurrentFSMState>(it.rawJson))
+            result.complete(Json { ignoreUnknownKeys = true }.decodeFromString<CurrentFSMState>(it.rawJson))
             CancelSubscription
         }
         connector.send(
@@ -57,7 +57,7 @@ class DefaultFSMAPI(
 
     override fun onStateChange(fn: (CurrentFSMState) -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.FSM_UPDATE.value) {
-            fn(Json.decodeFromString(it.rawJson))
+            fn(Json { ignoreUnknownKeys = true }.decodeFromString(it.rawJson))
         }
     }
 }

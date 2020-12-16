@@ -10,7 +10,6 @@ import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.connector.Subscription
 import com.avatao.tfw.sdk.connector.TFWServerConnector
 import com.avatao.tfw.sdk.message.TFWMessage
-import com.avatao.tfw.sdk.message.TFWMessageScope
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.CompletableFuture
@@ -24,7 +23,7 @@ class DefaultWebIDEAPI(
     override fun selectFile(filename: String, patterns: List<String>?): Future<FileContents> {
         val result = CompletableFuture<FileContents>()
         connector.subscribe(EventKey.IDE_READ.value) {
-            val prr = Json.decodeFromString<FileContents>(it.rawJson)
+            val prr = Json { ignoreUnknownKeys = true }.decodeFromString<FileContents>(it.rawJson)
             result.complete(prr)
             CancelSubscription
         }

@@ -20,7 +20,7 @@ class DefaultProcessManagementAPI(
         /*
         val result = CompletableFuture<ProcessStartResult>()
         connector.subscribe(EventKey.PROCESS_START.value) {
-            val psr = Json.decodeFromString<ProcessStartResult>(it.rawJson)
+            val psr = Json { ignoreUnknownKeys = true }.decodeFromString<ProcessStartResult>(it.rawJson)
             if (psr.name == name) {
                 result.complete(psr)
                 CancelSubscription
@@ -44,7 +44,7 @@ class DefaultProcessManagementAPI(
         /*
         val result = CompletableFuture<ProcessStopResult>()
         connector.subscribe(EventKey.PROCESS_STOP.value) {
-            val psr = Json.decodeFromString<ProcessStopResult>(it.rawJson)
+            val psr = Json { ignoreUnknownKeys = true }.decodeFromString<ProcessStopResult>(it.rawJson)
             if (psr.name == name) {
                 result.complete(psr)
                 CancelSubscription
@@ -65,7 +65,7 @@ class DefaultProcessManagementAPI(
         Runtime.getRuntime().exec("supervisorctl restart $name")
         /*val result = CompletableFuture<ProcessRestartResult>()
         connector.subscribe(EventKey.PROCESS_RESTART.value) {
-            val prr = Json.decodeFromString<ProcessRestartResult>(it.rawJson)
+            val prr = Json { ignoreUnknownKeys = true }.decodeFromString<ProcessRestartResult>(it.rawJson)
             if (prr.name == name) {
                 result.complete(prr)
                 CancelSubscription
@@ -84,7 +84,7 @@ class DefaultProcessManagementAPI(
 
     override fun readLog(): Flux<ProcessLogEntry> = Flux.create { sink ->
         connector.subscribe(EventKey.PROCESS_LOG_NEW.value) { msg ->
-            sink.next(Json.decodeFromString<ProcessLogEntry>(msg.rawJson))
+            sink.next(Json { ignoreUnknownKeys = true }.decodeFromString<ProcessLogEntry>(msg.rawJson))
             if (sink.isCancelled) {
                 CancelSubscription
             } else {

@@ -20,7 +20,7 @@ class DefaultMessageAPI(
 
     override fun onButtonClickHandler(fn: (button: String) -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.BUTTON_CLICK.value) {
-            fn(Json.decodeFromString(it.rawJson))
+            fn(Json { ignoreUnknownKeys = true }.decodeFromString(it.rawJson))
         }
     }
 }
