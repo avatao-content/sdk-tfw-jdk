@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.avatao.tfw.sdk.api.builder.QueueMessageBuilderTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-12-15T20:13:58" hostname="ARGONAUT" time="0.401">
-  <properties/>
-  <testcase name="shouldConstructProperJson()" classname="com.avatao.tfw.sdk.api.builder.QueueMessageBuilderTest" time="0.401"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
