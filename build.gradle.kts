@@ -75,9 +75,9 @@ tasks {
 
 publishing {
     publishWith(
-        project = project,
-        module = "tfw.sdk.jvm",
-        desc = "Avatao Content SDK for TFW."
+            project = project,
+            module = "tfw.sdk.jvm",
+            desc = "Avatao Content SDK for TFW."
     )
 }
 
@@ -87,9 +87,9 @@ signing {
 }
 
 fun PublishingExtension.publishWith(
-    project: Project,
-    module: String,
-    desc: String
+        project: Project,
+        module: String,
+        desc: String
 ) {
 
     with(project) {
@@ -148,15 +148,14 @@ fun PublishingExtension.publishWith(
         }
 
         repositories {
-
-            val sonatypeUsername = System.getenv("SONATYPE_USERNAME") ?: ""
-            val sonatypePassword = System.getenv("SONATYPE_PASSWORD") ?: ""
+            val ossrhUsername: String by project
+            val ossrhPassword: String by project
 
             maven {
                 url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
                 credentials {
-                    username = if (sonatypeUsername.isBlank()) "" else sonatypeUsername
-                    password = if (sonatypePassword.isBlank()) "" else sonatypePassword
+                    username = if (ossrhUsername.isBlank()) "" else ossrhUsername
+                    password = if (ossrhPassword.isBlank()) "" else ossrhPassword
                 }
             }
         }

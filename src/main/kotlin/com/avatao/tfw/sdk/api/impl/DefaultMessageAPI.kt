@@ -7,8 +7,6 @@ import com.avatao.tfw.sdk.api.data.EventKey
 import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.connector.Subscription
 import com.avatao.tfw.sdk.connector.TFWServerConnector
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class DefaultMessageAPI(
     private val connector: TFWServerConnector
@@ -18,9 +16,9 @@ class DefaultMessageAPI(
 
     override fun queueMessages() = QueueMessageBuilder(connector, this)
 
-    override fun onButtonClickHandler(fn: (button: String) -> SubscriptionCommand): Subscription {
+    override fun onButtonClickHandler(fn: (command: String) -> SubscriptionCommand): Subscription {
         return connector.subscribe(EventKey.BUTTON_CLICK.value) {
-            fn(Json { ignoreUnknownKeys = true }.decodeFromString(it.rawJson))
+            fn(it.data["value"]?.toString() ?: error("no value"))
         }
     }
 }

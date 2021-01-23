@@ -3,10 +3,8 @@ package com.avatao.tfw.sdk.api
 import com.avatao.tfw.sdk.api.command.ReadFile
 import com.avatao.tfw.sdk.api.command.WriteFile
 import com.avatao.tfw.sdk.api.data.EventKey
-import com.avatao.tfw.sdk.api.data.FileContents
 import com.avatao.tfw.sdk.api.data.SubscriptionCommand
 import com.avatao.tfw.sdk.connector.Subscription
-import java.util.concurrent.Future
 
 interface WebIDEAPI {
 
@@ -16,15 +14,7 @@ interface WebIDEAPI {
     fun selectFile(
         filename: String,
         patterns: List<String>? = null
-    ): Future<FileContents>
-
-    /**
-     * Adds an event handler that will be triggered whenever a file read operation
-     * is requested in the web IDE.
-     */
-    fun onReadFile(
-        fn: (ReadFile) -> SubscriptionCommand
-    ): Subscription
+    )
 
     /**
      * Writes the given [content] to the given [filename].

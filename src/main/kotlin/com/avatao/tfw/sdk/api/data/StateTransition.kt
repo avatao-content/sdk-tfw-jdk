@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class StateTransition(
-    val fromState: String,
-    val toState: String,
+    val from_state: String,
+    val to_state: String,
     val trigger: String,
     val timestamp: String
 )

@@ -13,7 +13,7 @@ class SendMessageBuilder(
     private val connector: TFWServerConnector,
     private val messageAPI: MessageAPI,
     private var message: String? = null,
-    private var originator: String? = null,
+    private var originator: String = "avataobot",
     private var wpm: Int? = null,
     private var typing: Boolean? = null,
     private var command: String? = null,

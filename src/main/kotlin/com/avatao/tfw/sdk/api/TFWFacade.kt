@@ -1,17 +1,16 @@
 package com.avatao.tfw.sdk.api
 
 import com.avatao.tfw.sdk.api.data.SubscriptionCommand
-import com.avatao.tfw.sdk.api.data.TFWConfig
 import com.avatao.tfw.sdk.connector.Subscription
 import com.avatao.tfw.sdk.connector.TFWServerConnector
 import com.avatao.tfw.sdk.message.TFWMessage
 import java.io.Closeable
 
 interface TFWFacade
-    : Closeable, FrontendAPI, MessageAPI, WebIDEAPI, ConsoleAPI, TerminalAPI, ProcessManagementAPI, FSMAPI {
+    : Closeable, FrontendAPI, MessageAPI, WebIDEAPI, ConsoleAPI,
+    TerminalAPI, ProcessManagementAPI, FSMAPI {
 
     val connector: TFWServerConnector
-    val tfwConfig: TFWConfig
 
     fun send(message: TFWMessage) = connector.send(message)
 

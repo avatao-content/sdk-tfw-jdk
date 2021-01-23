@@ -2,11 +2,7 @@ package com.avatao.tfw.sdk.api
 
 import com.avatao.tfw.sdk.api.builder.ProcessLogConfigurationBuilder
 import com.avatao.tfw.sdk.api.data.ProcessLogEntry
-import com.avatao.tfw.sdk.api.data.ProcessRestartResult
-import com.avatao.tfw.sdk.api.data.ProcessStartResult
-import com.avatao.tfw.sdk.api.data.ProcessStopResult
 import reactor.core.publisher.Flux
-import java.util.concurrent.Future
 
 interface ProcessManagementAPI {
 
@@ -34,6 +30,4 @@ interface ProcessManagementAPI {
      * Configures the behavior of process logging events.
      */
     fun configLog(): ProcessLogConfigurationBuilder
-
-
 }

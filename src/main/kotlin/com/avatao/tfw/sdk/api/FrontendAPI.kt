@@ -49,14 +49,14 @@ interface FrontendAPI {
      * Sets the selected tab on the terminal component to "console".
      */
     fun switchToConsole() = configureDashboard()
-        .terminalMenuItem(TerminalMenuItem.CONSOLE)
+        .terminalMenuItem(TerminalMenuItem.console)
         .commit()
 
     /**
      * Sets the selected tab on the terminal component to "terminal".
      */
     fun switchToTerminal() = configureDashboard()
-        .terminalMenuItem(TerminalMenuItem.TERMINAL)
+        .terminalMenuItem(TerminalMenuItem.terminal)
         .commit()
 
     /**

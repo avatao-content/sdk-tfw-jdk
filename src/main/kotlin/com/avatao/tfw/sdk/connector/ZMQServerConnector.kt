@@ -25,7 +25,7 @@ class ZMQServerConnector : TFWServerConnector {
     private val publisher = context.socket(SocketType.PUSH)
 
     private val subHost = System.getenv("TFW_PUB_HOST") ?: "localhost"
-    private val subPort = System.getenv("TFW_PUB_PORT") ?: "8766" //7654
+    private val subPort = System.getenv("TFW_PUB_PORT") ?: "7654" //8766
     private val subscriber = context.socket(SocketType.SUB)
 
     private val subscriptions = ConcurrentHashMap<String, CopyOnWriteArrayList<CallbackSubscription>>()
@@ -37,6 +37,7 @@ class ZMQServerConnector : TFWServerConnector {
         thread {
             while (running.get()) {
                 ZMsg.recvMsg(subscriber, false)?.let { msg ->
+                    println("$msg")
                     val key = msg.popString()
                     val value: Map<String, Any> =
                         objectMapper.readValue(msg.popString(), object : TypeReference<Map<String, Any>>() {})
