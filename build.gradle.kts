@@ -9,7 +9,6 @@ import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.withType
 
 plugins {
-    application
     kotlin("jvm") version "1.4.10"
     kotlin("plugin.serialization") version "1.4.10"
     id("maven-publish")
@@ -47,30 +46,6 @@ tasks.test {
 // config JVM target to 1.8 for kotlin compilation tasks
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions.jvmTarget = "1.8"
-}
-
-application {
-    mainClassName = "com.avatao.tfw.sdk.MainKt"
-}
-
-tasks.withType<Jar> {
-    manifest {
-        attributes["Main-Class"] = "com.avatao.tfw.sdk.MainKt"
-    }
-}
-
-val fatJar = task("fatJar", type = Jar::class) {
-    manifest {
-        attributes["Main-Class"] = "com.avatao.tfw.sdk.MainKt"
-    }
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
-    with(tasks.jar.get() as CopySpec)
-}
-
-tasks {
-    "assemble" {
-        dependsOn(fatJar)
-    }
 }
 
 publishing {
