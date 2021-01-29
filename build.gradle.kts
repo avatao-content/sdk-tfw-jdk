@@ -1,12 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.gradle.api.Project
-import org.gradle.api.publish.PublishingExtension
-import org.gradle.api.publish.maven.MavenPublication
-import org.gradle.api.tasks.bundling.Jar
-import org.gradle.kotlin.dsl.getValue
-import org.gradle.kotlin.dsl.provideDelegate
-import org.gradle.kotlin.dsl.registering
-import org.gradle.kotlin.dsl.withType
+
+val POM_URL: String by project
+val POM_SCM_URL: String by project
+val POM_SCM_CONNECTION: String by project
+val POM_SCM_DEV_CONNECTION: String by project
+val POM_LICENCE_NAME: String by project
+val POM_LICENCE_URL: String by project
+val POM_LICENCE_DIST: String by project
+val POM_DEVELOPER_ID: String by project
+val POM_DEVELOPER_NAME: String by project
+val POM_DEVELOPER_EMAIL: String by project
+val POM_DEVELOPER_ORGANIZATION: String by project
+val POM_DEVELOPER_ORGANIZATION_URL: String by project
 
 plugins {
     kotlin("jvm") version "1.4.10"
@@ -49,49 +54,15 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 publishing {
-    publishWith(
-            project = project,
-            module = "tfw.sdk.jvm",
-            desc = "Avatao Content SDK for TFW."
-    )
-}
+    val emptyJavadocJar by tasks.registering(Jar::class) {
+        archiveClassifier.set("javadoc")
+    }
 
-signing {
-    isRequired = false
-    sign(publishing.publications)
-}
-
-fun PublishingExtension.publishWith(
-        project: Project,
-        module: String,
-        desc: String
-) {
-
-    with(project) {
-
-        val emptyJavadocJar by tasks.registering(Jar::class) {
-            archiveClassifier.set("javadoc")
-        }
-
-        val POM_URL: String by project
-        val POM_SCM_URL: String by project
-        val POM_SCM_CONNECTION: String by project
-        val POM_SCM_DEV_CONNECTION: String by project
-        val POM_LICENCE_NAME: String by project
-        val POM_LICENCE_URL: String by project
-        val POM_LICENCE_DIST: String by project
-        val POM_DEVELOPER_ID: String by project
-        val POM_DEVELOPER_NAME: String by project
-        val POM_DEVELOPER_EMAIL: String by project
-        val POM_DEVELOPER_ORGANIZATION: String by project
-        val POM_DEVELOPER_ORGANIZATION_URL: String by project
-
-        publications.withType<MavenPublication>().all {
-
+    publications {
+        create<MavenPublication>("tfw.sdk.jvm") {
             pom {
 
-                name.set(module)
-                description.set(desc)
+                description.set("Avatao Content SDK for TFW.")
                 url.set(POM_URL)
 
                 scm {
@@ -121,18 +92,23 @@ fun PublishingExtension.publishWith(
 
             artifact(emptyJavadocJar.get())
         }
+    }
 
-        repositories {
-            val ossrhUsername: String by project
-            val ossrhPassword: String by project
+    repositories {
+        val ossrhUsername: String by project
+        val ossrhPassword: String by project
 
-            maven {
-                url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
-                credentials {
-                    username = if (ossrhUsername.isBlank()) "" else ossrhUsername
-                    password = if (ossrhPassword.isBlank()) "" else ossrhPassword
-                }
+        maven {
+            url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+            credentials {
+                username = if (ossrhUsername.isBlank()) "" else ossrhUsername
+                password = if (ossrhPassword.isBlank()) "" else ossrhPassword
             }
         }
     }
+}
+
+signing {
+    isRequired = false
+    sign(publishing.publications)
 }
