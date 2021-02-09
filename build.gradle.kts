@@ -54,6 +54,12 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 publishing {
+
+    val sourcesJar by tasks.creating(Jar::class) {
+        archiveClassifier.set("sources")
+        from(sourceSets.getByName("main").allSource)
+    }
+
     val emptyJavadocJar by tasks.registering(Jar::class) {
         archiveClassifier.set("javadoc")
     }
@@ -62,6 +68,7 @@ publishing {
         create<MavenPublication>("tfw.sdk.jvm") {
             pom {
 
+                name.set("tfw.sdk.jvm")
                 description.set("Avatao Content SDK for TFW.")
                 url.set(POM_URL)
 
@@ -90,25 +97,28 @@ publishing {
                 }
             }
 
+            from(components.findByName("java"))
             artifact(emptyJavadocJar.get())
+            artifact(sourcesJar)
         }
     }
 
     repositories {
-        val ossrhUsername: String by project
-        val ossrhPassword: String by project
+
+        val sonatypeUsername = System.getenv("SONATYPE_USERNAME") ?: ""
+        val sonatypePassword = System.getenv("SONATYPE_PASSWORD") ?: ""
 
         maven {
             url = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
             credentials {
-                username = if (ossrhUsername.isBlank()) "" else ossrhUsername
-                password = if (ossrhPassword.isBlank()) "" else ossrhPassword
+                username = if (sonatypeUsername.isBlank()) "" else sonatypeUsername
+                password = if (sonatypePassword.isBlank()) "" else sonatypePassword
             }
         }
     }
 }
 
 signing {
-    isRequired = false
+    isRequired = true
     sign(publishing.publications)
 }
